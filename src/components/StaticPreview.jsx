@@ -78,7 +78,7 @@ export default function StaticPreview({ mode, onToggleMode, status = "offline" }
                 size="small"
                 color={status === "checking" ? "info" : "warning"}
                 variant="outlined"
-                label={status === "checking" ? "Checking 10.100.0.24:5099…" : "No live API on this host"}
+                label={status === "checking" ? "Checking 10.100.0.24:5099…" : "Live API not reachable from this browser"}
               />
               <Button
                 variant="contained"
@@ -91,6 +91,11 @@ export default function StaticPreview({ mode, onToggleMode, status = "offline" }
               </Button>
             </Stack>
           </Stack>
+
+          <Typography variant="caption" color="text.secondary" component="div" sx={{ mb: 2 }}>
+            If the backend is running, use <strong>Open live app</strong>. Chrome may ask for local
+            network access; allow it and reload to let this page connect automatically.
+          </Typography>
 
           <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" }, gap: 2 }}>
             {SHOTS.map((s) => (
