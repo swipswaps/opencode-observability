@@ -1,6 +1,12 @@
 const BASE = new URL("./", self.location).pathname;
-const CACHE = "ocweb-demo-v1";
-const SHELL = [BASE, `${BASE}manifest.webmanifest`, `${BASE}icon-192.png`, `${BASE}icon-512.png`];
+const CACHE = "ocweb-screens-v1";
+const SHOTS = [
+  "screenshots/status-mui-desktop.png",
+  "screenshots/status-mui-activity-desktop.png",
+  "screenshots/status-mui-mobile.png",
+  "screenshots/status-mui-activity.png",
+].map((p) => `${BASE}${p}`);
+const SHELL = [BASE, `${BASE}manifest.webmanifest`, `${BASE}icon-192.png`, `${BASE}icon-512.png`, ...SHOTS];
 
 self.addEventListener("install", (event) => {
   self.skipWaiting();
@@ -21,7 +27,7 @@ self.addEventListener("fetch", (event) => {
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
-  if (url.pathname.startsWith(`${BASE}assets/`) || url.pathname.startsWith(`${BASE}icon-`) || url.pathname.endsWith("manifest.webmanifest")) {
+  if (url.pathname.startsWith(`${BASE}assets/`) || url.pathname.startsWith(`${BASE}screenshots/`) || url.pathname.startsWith(`${BASE}icon-`) || url.pathname.endsWith("manifest.webmanifest")) {
     event.respondWith(
       caches.match(req).then(
         (cached) =>

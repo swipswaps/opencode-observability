@@ -1,6 +1,7 @@
-import { IS_DEMO } from "./demo.js";
-
-export { IS_DEMO };
+export const IS_STATIC_PREVIEW =
+  typeof window !== "undefined" &&
+  (window.location.hostname.endsWith(".github.io") ||
+    new URLSearchParams(window.location.search).get("static") === "1");
 
 export async function fetchJSON(path, ms = 12000) {
   const opts = ms && typeof AbortSignal !== "undefined" && AbortSignal.timeout
@@ -113,7 +114,6 @@ export function sessionDuration(s) {
 }
 
 export function sessionHref(id) {
-  if (IS_DEMO) return "#";
   try {
     const srv = `${location.protocol}//${location.hostname}:4096`;
     const b64 = btoa(srv).replace(/=+$/, "");

@@ -1,13 +1,11 @@
-# opencode observability — Pages demo
+# opencode observability — screenshot preview
 
-Static demo of the Material UI observability app, deployed at:
+GitHub Pages build: <https://swipswaps.github.io/opencode-observability/>
 
-<https://swipswaps.github.io/opencode-observability/>
-
-The demo uses deterministic synthetic cost, activity, sessions, todos, and
-health data. It does not call a local API, so the public page is useful for
-UI/UX review and Android install testing. The live version stays at
-`https://10.100.0.24:5099/app/` in the main workspace.
+This is not synthetic data. GitHub Pages cannot reach the local API, so the
+public build shows **actual screenshots captured from the live app** at
+`https://10.100.0.24:5099/app/`. The live app remains the source of truth; the
+preview makes no API calls and displays no fake metrics.
 
 ## Build
 
@@ -16,31 +14,23 @@ npm ci
 npm run build
 ```
 
-Vite builds with `base=/opencode-observability/`; the GitHub Actions workflow
-publishes `dist/` with `actions/deploy-pages`.
+Vite base is `/opencode-observability/`; the Actions workflow publishes
+`dist/` with `actions/deploy-pages`.
 
-## Demo mode
+## What the preview shows
 
-`src/demo.js` activates when the hostname ends in `.github.io` or the URL has
-`?demo=1`. It supplies the same shapes as `/api/cost`, `/api/activity`,
-`/api/todos`, `/api/health`, and `/api/sessions`; `useLive` appends a synthetic
-event every 12 seconds Client-side.
+- Desktop Overview with cost/token/health/trend cards.
+- Desktop Activity timeline with the now/relative-duration axis.
+- Android Overview and Activity at 390 px.
+- Clickable full-size images, installable PWA shell, light/dark theme.
 
-## Features
+The screenshots are the real `status-mui-*.png` captures from the local app
+(`docs/ux/` in the main workspace).
 
-- MUI 9 / React 19 / Vite 8.
-- Overview with cost, token mix, health, 14-day cost trend, recent sessions.
-- Activity timeline: newest first, filters, Steps off by default, `/` search,
-  now/relative-duration axis, expand/copy, per-row JSON copy.
-- Sessions with search/sort; Todos; theme toggle; hash routes.
-- Installable PWA with app-scoped manifest and service worker.
-
-## Monitoring
-
-From a host with `gh` auth and a display:
+## Monitor
 
 ```bash
-gh run list --repo swipswaps/opencode-observability --limit 5
+gh run list --repo swipswaps/opencode-observability --limit 3
 gh api repos/swipswaps/opencode-observability/pages
 xdg-open https://swipswaps.github.io/opencode-observability/
 ```

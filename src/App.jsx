@@ -34,7 +34,8 @@ import ActivityTimeline from "./components/ActivityTimeline.jsx";
 import Sessions from "./components/Sessions.jsx";
 import Todos from "./components/Todos.jsx";
 import { makeTheme } from "./theme.js";
-import { IS_DEMO } from "./lib.js";
+import { IS_STATIC_PREVIEW } from "./lib.js";
+import StaticPreview from "./components/StaticPreview.jsx";
 import { timeStr } from "./lib.js";
 import { useLive, useRemote } from "./useLive.js";
 
@@ -121,7 +122,6 @@ function Shell({ mode, onToggleMode, canInstall, onInstall }) {
             label={live.connected ? "live" : "offline"}
             variant={live.connected ? "filled" : "outlined"}
           />
-          {IS_DEMO && <Chip size="small" color="info" label="demo" />}
           {live.shed && <Chip size="small" color="warning" label="paused" />}
           <Box sx={{ flexGrow: 1 }} />
           <Typography variant="caption" color="text.secondary" sx={{ display: { xs: "none", sm: "block" } }}>
@@ -187,13 +187,11 @@ function Shell({ mode, onToggleMode, canInstall, onInstall }) {
             ))}
           </List>
           <Divider sx={{ my: 1.5 }} />
-          {!IS_DEMO && (
-            <Button component="a" href="/" size="small" sx={{ mb: 1 }}>
-              Classic view
-            </Button>
-          )}
+          <Button component="a" href="/" size="small" sx={{ mb: 1 }}>
+            Classic view
+          </Button>
           <Typography variant="caption" color="text.secondary" component="div">
-            {IS_DEMO ? "Demo data · no backend" : "Local read-only · /api/stream"}
+            Local read-only · /api/stream
           </Typography>
           <Typography variant="caption" color="text.secondary" component="div">
             {live.last ? `updated ${timeStr(live.last)}` : "waiting"}
@@ -291,12 +289,16 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Shell
-        mode={mode}
-        onToggleMode={() => setMode((m) => (m === "dark" ? "light" : "dark"))}
-        canInstall={Boolean(installEvent)}
-        onInstall={install}
-      />
+      {IS_STATIC_PREVIEW ? (
+        <StaticPreview mode={mode} onToggleMode={() => setMode((m) => (m === "dark" ? "light" : "dark"))} />
+      ) : (
+        <Shell
+          mode={mode}
+          onToggleMode={() => setMode((m) => (m === "dark" ? "light" : "dark"))}
+          canInstall={Boolean(installEvent)}
+          onInstall={install}
+        />
+      )}
     </ThemeProvider>
   );
 }
