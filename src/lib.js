@@ -1,13 +1,20 @@
-export const IS_STATIC_PREVIEW =
+export const IS_PUBLIC =
   typeof window !== "undefined" &&
   (window.location.hostname.endsWith(".github.io") ||
     new URLSearchParams(window.location.search).get("static") === "1");
+
+export const API_BASE = (() => {
+  if (typeof window === "undefined") return "";
+  const query = new URLSearchParams(window.location.search).get("api");
+  if (query) return query.replace(/\/$/, "");
+  return IS_PUBLIC ? "https://10.100.0.24:5099" : "";
+})();
 
 export async function fetchJSON(path, ms = 12000) {
   const opts = ms && typeof AbortSignal !== "undefined" && AbortSignal.timeout
     ? { signal: AbortSignal.timeout(ms) }
     : undefined;
-  const res = await fetch(path, opts);
+  const res = await fetch(API_BASE + path, opts);
   if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
   return res.json();
 }

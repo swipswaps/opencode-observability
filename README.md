@@ -2,10 +2,19 @@
 
 GitHub Pages build: <https://swipswaps.github.io/opencode-observability/>
 
-This is not synthetic data. GitHub Pages cannot reach the local API, so the
-public build shows **actual screenshots captured from the live app** at
-`https://10.100.0.24:5099/app/`. The live app remains the source of truth; the
-preview makes no API calls and displays no fake metrics.
+The public build probes `https://10.100.0.24:5099/api/resources` on load. When
+the correct backend is reachable (trusted local CA; Chrome allows private
+network access), it renders the live MUI shell and uses the real API. If the
+probe fails, it shows **actual screenshots captured from the live app** at
+`https://10.100.0.24:5099/app/`; there is no synthetic data or fake metric.
+
+## Live detection
+
+`src/lib.js` sets `API_BASE=https://10.100.0.24:5099` on `.github.io` (override
+with `?api=https://192.168.4.24:5099`). `App` probes `/api/resources` with a
+5 s timeout. The local dashboard adds `Access-Control-Allow-Origin:
+https://swipswaps.github.io` and `Access-Control-Allow-Private-Network: true`,
+plus CORS preflight handling, for this probe and the live API/SSE.
 
 ## Build
 

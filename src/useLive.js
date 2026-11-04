@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetchJSON } from "./lib.js";
+import { API_BASE, fetchJSON } from "./lib.js";
 
 const initial = {
   cost: null,
@@ -53,7 +53,7 @@ export function useLive() {
 
     if (typeof EventSource !== "undefined") {
       try {
-        es = new EventSource("/api/stream");
+        es = new EventSource(`${API_BASE}/api/stream`);
         const onflow = (ev) => {
           try {
             apply(JSON.parse(ev.data));

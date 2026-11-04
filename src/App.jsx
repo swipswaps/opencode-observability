@@ -34,7 +34,7 @@ import ActivityTimeline from "./components/ActivityTimeline.jsx";
 import Sessions from "./components/Sessions.jsx";
 import Todos from "./components/Todos.jsx";
 import { makeTheme } from "./theme.js";
-import { IS_STATIC_PREVIEW } from "./lib.js";
+import { API_BASE, IS_PUBLIC } from "./lib.js";
 import StaticPreview from "./components/StaticPreview.jsx";
 import { timeStr } from "./lib.js";
 import { useLive, useRemote } from "./useLive.js";
@@ -250,6 +250,23 @@ export default function App() {
   });
   const theme = useMemo(() => makeTheme(mode), [mode]);
   const [installEvent, setInstallEvent] = useState(null);
+  const [backend, setBackend] = useState(IS_PUBLIC ? "checking" : "live");
+
+  useEffect(() => {
+    if (!IS_PUBLIC) return;
+    let closed = false;
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 5000);
+    fetch(`${API_BASE}/api/resources`, { signal: ctrl.signal, cache: "no-store" })
+      .then((r) => { if (!closed) setBackend(r.ok ? "live" : "offline"); })
+      .catch(() => { if (!closed) setBackend("offline"); })
+      .finally(() => clearTimeout(timer));
+    return () => {
+      closed = true;
+      ctrl.abort();
+      clearTimeout(timer);
+    };
+  }, []);
 
   useEffect(() => {
     const onPrompt = (e) => {
@@ -289,8 +306,12 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {IS_STATIC_PREVIEW ? (
-        <StaticPreview mode={mode} onToggleMode={() => setMode((m) => (m === "dark" ? "light" : "dark"))} />
+      {IS_PUBLIC && backend !== "live" ? (
+        <StaticPreview
+          mode={mode}
+          status={backend}
+          onToggleMode={() => setMode((m) => (m === "dark" ? "light" : "dark"))}
+        />
       ) : (
         <Shell
           mode={mode}

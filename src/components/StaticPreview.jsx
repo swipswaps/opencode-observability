@@ -40,7 +40,7 @@ const SHOTS = [
   },
 ];
 
-export default function StaticPreview({ mode, onToggleMode }) {
+export default function StaticPreview({ mode, onToggleMode, status = "offline" }) {
   const base = import.meta.env.BASE_URL;
   return (
     <>
@@ -74,7 +74,12 @@ export default function StaticPreview({ mode, onToggleMode }) {
               </Typography>
             </Box>
             <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" justifyContent="flex-end">
-              <Chip size="small" color="warning" variant="outlined" label="No live API on this host" />
+              <Chip
+                size="small"
+                color={status === "checking" ? "info" : "warning"}
+                variant="outlined"
+                label={status === "checking" ? "Checking 10.100.0.24:5099…" : "No live API on this host"}
+              />
               <Button
                 variant="contained"
                 size="small"
