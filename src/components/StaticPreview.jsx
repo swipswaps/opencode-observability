@@ -89,7 +89,6 @@ export default function StaticPreview({ mode, onToggleMode }) {
                     component="img"
                     src={`${base}screenshots/${s.src}`}
                     alt={s.title}
-                    loading="lazy"
                     sx={{ display: "block", width: "100%", height: "auto" }}
                   />
                 </Box>
