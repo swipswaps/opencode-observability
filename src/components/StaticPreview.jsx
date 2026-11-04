@@ -1,6 +1,7 @@
 import {
   AppBar,
   Box,
+  Button,
   Card,
   CardContent,
   Chip,
@@ -72,7 +73,18 @@ export default function StaticPreview({ mode, onToggleMode }) {
                 below were captured from that real UI; no synthetic metrics or placeholder session data.
               </Typography>
             </Box>
-            <Chip size="small" color="warning" variant="outlined" label="No live API on this host" />
+            <Stack direction="row" spacing={1} useFlexGap flexWrap="wrap" justifyContent="flex-end">
+              <Chip size="small" color="warning" variant="outlined" label="No live API on this host" />
+              <Button
+                variant="contained"
+                size="small"
+                href="https://10.100.0.24:5099/app/"
+                target="_blank"
+                rel="noopener"
+              >
+                Open live app
+              </Button>
+            </Stack>
           </Stack>
 
           <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr" }, gap: 2 }}>
