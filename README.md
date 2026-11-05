@@ -43,3 +43,14 @@ gh run list --repo swipswaps/opencode-observability --limit 3
 gh api repos/swipswaps/opencode-observability/pages
 xdg-open https://swipswaps.github.io/opencode-observability/
 ```
+
+
+## Screenshots
+
+![Desktop overview](public/screenshots/status-mui-desktop.png)
+
+![Desktop activity](public/screenshots/status-mui-activity-desktop.png)
+
+![Android overview](public/screenshots/status-mui-mobile.png)
+
+![Android activity](public/screenshots/status-mui-activity.png)
